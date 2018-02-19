@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+# old directory (added by hohno)
+old/
+\#*
+
+###
