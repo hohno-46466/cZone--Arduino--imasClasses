@@ -1,12 +1,13 @@
-#ifndef IMAS_MORSE_H
-#define IMAS_MORSE_H
+#ifndef __IMAS_MORSE_H__
+#define __IMAS_MORSE_H__
 
 // imasMORSE.h
 
 // MORSE class for im@sClock
 
 // First version: Fri Jun 24 23:31:23 JST 2016
-// Last update: Sat Oct 22 16:52:19 JST 2016
+// Prev update: Sat Oct 22 16:52:19 JST 2016
+// New update: Wed Apr 19 07:30:16 JST 2023
 
 // ---------------------------------------------------------
 
@@ -64,4 +65,4 @@ class imasMORSEclass : public virtual imasBASEclass {
 
 // ---------------------------------------------------------
 
-#endif // IMAS_MORSE_H
+#endif // __IMAS_MORSE_H__

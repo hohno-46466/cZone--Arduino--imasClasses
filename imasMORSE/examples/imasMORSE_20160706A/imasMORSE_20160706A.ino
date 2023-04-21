@@ -13,20 +13,22 @@
 #include "config.h"
 #ifndef SIMPLE_CLASS_TEST	// defined or undefined in config.h
 #include "imasBASE.h"		// if not defined SIMPLE_CLASS_TEST, include this file.
-#include "misc.h"
+// #include "misc.h"
 #endif // SIMPLE_CLASS_TEST
 #include "imasMORSE.h"
 
-imasMORSE im;
+imasMORSEclass im;
 
 // ---------------------------------------------------------
+
+#define MY_BUZZER_PIN (5) // (4) // (13)
 
 void setup() {
 
   Serial.begin(57600);
   
-  im.setSpeed(1.50);
-  im.setBeepPin(13);
+  im.setSpeed(1.00);
+  im.setBeepPin(MY_BUZZER_PIN);
   im.setConfig(CW_TEXT|CW_DIO);
   im.setPreamble15("Test:");
   im.init();

@@ -73,7 +73,7 @@ imasMORSEclass::imasMORSEclass(float s, uint8_t c, uint8_t p) {
 
 void imasMORSEclass::init() {
   //
-  pinMode(_beepPin, OUTPUT);
+  /*XXX*/ //pinMode(_beepPin, OUTPUT);
 }
 
 void imasMORSEclass::init(float s) {
@@ -362,17 +362,17 @@ void imasMORSEclass::message(char *mesg) {
       if (x[j] == 1) {
 	// dot
 	if (_config & (CW_TEXT|CW_VERBOSE)) { Serial.print('.'); }
-	digitalWrite(_beepPin, HIGH);
+	/*XXX*/ analogWrite(_beepPin, 400);//digitalWrite(_beepPin, HIGH);
 	delay(s);
-	digitalWrite(_beepPin, LOW);
+	/*XXX*/ analogWrite(_beepPin, 0);//digitalWrite(_beepPin, LOW);
 	delay(s);
 
       } else if (x[j] == 2) {
 	// dash
 	if (_config & (CW_TEXT|CW_VERBOSE)) { Serial.print('-'); }
-	digitalWrite(_beepPin, HIGH);
+	/*XXX*/ analogWrite(_beepPin, 400);//digitalWrite(_beepPin, HIGH);
 	delay(3*s);
-	digitalWrite(_beepPin, LOW);
+	/*XXX*/ analogWrite(_beepPin, 0);//digitalWrite(_beepPin, LOW);
 	delay(s);
 
       } else if (x[j] == 3) {
