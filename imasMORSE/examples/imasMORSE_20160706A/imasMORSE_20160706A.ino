@@ -27,7 +27,7 @@ void setup() {
 
   Serial.begin(57600);
   
-  im.setSpeed(1.00);
+  im.setSpeed(2.00);
   im.setBeepPin(MY_BUZZER_PIN);
   im.setConfig(CW_TEXT|CW_DIO);
   im.setPreamble15("Test:");

@@ -20,7 +20,9 @@
 
 #define CW_TEXT	(0x01)
 #define CW_DIO	(0x02)
-#define CW_TONE	(0x04)		// not supported now
+#define CW_BEEP	(0x04)		// not supported now
+#define CW_TONE	(0x08)		// not supported now
+
 #define CW_VERBOSE (0x80)
 
 // ---------------------------------------------------------
@@ -49,16 +51,25 @@ class imasMORSEclass : public virtual imasBASEclass {
   void setConfig(uint8_t config);
   uint8_t getConfig();
   //
+  void setDIOPin(uint8_t dioPin);
+  uint8_t getDIOPin();
+  //
   void setBeepPin(uint8_t beepPin);
   uint8_t getBeepPin();
   //
+  void setTonePin(uint8_t tonePin);
+  uint8_t getTonePin();
+  //  
   void setPreamble15(char *str);
   char* getPreamble15();
   //
   void message(char *str);
+  //
  private:
   uint8_t _config;
+  uint8_t _dioPin;
   uint8_t _beepPin;
+  uint8_t _tonePin;
   float   _speed;
   char	_preamble15[16];
 };

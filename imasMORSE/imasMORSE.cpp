@@ -124,6 +124,13 @@ uint8_t imasMORSEclass::getConfig() {
   return(_config);
 }
 
+void imasMORSEclass::setDIOPin(uint8_t p) {
+  _dioPin = p;
+}
+
+uint8_t imasMORSEclass::getDIOPin() {
+  return(_dioPin);
+}
 
 void imasMORSEclass::setBeepPin(uint8_t p) {
   _beepPin = p;
@@ -131,6 +138,14 @@ void imasMORSEclass::setBeepPin(uint8_t p) {
 
 uint8_t imasMORSEclass::getBeepPin() {
   return(_beepPin);
+}
+
+void imasMORSEclass::setTonePin(uint8_t p) {
+  _tonePin = p;
+}
+
+uint8_t imasMORSEclass::getTonePin() {
+  return(_tonePin);
 }
 
 void imasMORSEclass::setPreamble15(char *str) {
