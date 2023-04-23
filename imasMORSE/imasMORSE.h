@@ -51,8 +51,8 @@ class imasMORSEclass : public virtual imasBASEclass {
   void setConfig(uint8_t config);
   uint8_t getConfig();
   //
-  void setDIOPin(uint8_t dioPin);
-  uint8_t getDIOPin();
+  void setDIOpin(uint8_t dioPin);
+  uint8_t getDIOpin();
   //
   void setBeepPin(uint8_t beepPin);
   uint8_t getBeepPin();
@@ -77,3 +77,4 @@ class imasMORSEclass : public virtual imasBASEclass {
 // ---------------------------------------------------------
 
 #endif // __IMAS_MORSE_H__
+

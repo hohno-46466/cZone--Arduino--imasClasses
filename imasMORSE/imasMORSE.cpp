@@ -107,6 +107,7 @@ void imasMORSEclass::init(float s, uint8_t c, uint8_t p) {
 // 機能：imasMORSE インスタンスの諸パラメータを設定あるいは取得する．
 // 注意：
 
+// setSpeed() / getSpeed()
 void imasMORSEclass::setSpeed(float s) {
   _speed = s;
 }
@@ -115,7 +116,7 @@ float imasMORSEclass::getSpeed() {
   return(_speed);
 }
 
-
+// setConfig() / getConfig()
 void imasMORSEclass::setConfig(uint8_t conf) {
   _config = conf;
 }
@@ -124,14 +125,16 @@ uint8_t imasMORSEclass::getConfig() {
   return(_config);
 }
 
-void imasMORSEclass::setDIOPin(uint8_t p) {
+// setDIOpin() / getDIOpin()
+void imasMORSEclass::setDIOpin(uint8_t p) {
   _dioPin = p;
 }
 
-uint8_t imasMORSEclass::getDIOPin() {
+uint8_t imasMORSEclass::getDIOpin() {
   return(_dioPin);
 }
 
+// setBeepPin() / getBeepPin()
 void imasMORSEclass::setBeepPin(uint8_t p) {
   _beepPin = p;
 }
@@ -140,6 +143,7 @@ uint8_t imasMORSEclass::getBeepPin() {
   return(_beepPin);
 }
 
+// setTonePin() / getTonePin()
 void imasMORSEclass::setTonePin(uint8_t p) {
   _tonePin = p;
 }
@@ -183,7 +187,7 @@ struct DnD {	// Dot and Dash
   uint16_t t5:2;
   uint16_t t6:2;
   uint16_t t7:2;
-} dataDnD[] = {
+} dataDnD01[] = {
   /* index = 0..26 */
   { 3, 0, 0, 0, 0, 0, 0, 0 }, // 00:SP
   { 1, 2, 0, 0, 0, 0, 0, 0 }, // 01:A
@@ -325,9 +329,11 @@ void imasMORSEclass::message(char *mesg) {
 
   int16_t s = DnD_SPEED_DEF / _speed;
 
+  // set speed
   s = (s < DnD_SPEED_LL) ? DnD_SPEED_LL : (s > DnD_SPEED_UL) ? DnD_SPEED_UL : s;
 
-  while(*mesg == ' ') {
+  // skip white spaces
+  while((*mesg == ' ') /*|| *mesg == '\t')*/) {
     mesg++;
   }
   
@@ -335,37 +341,38 @@ void imasMORSEclass::message(char *mesg) {
     ch = *mesg;
 
     if (ch == ' ') {
-      /* idx = 0 */
+      /* in case of ' ', idx will be 0 */
       idx = 0;
     } else if ((ch >= 'a') && (ch <= 'z')) {
-      /* idx = 1..26 */
+      /* in case of alphabets, idx will be 1..26 */
       idx = 1 + (ch - 'a');
     } else if ((ch >= 'A') && (ch <= 'Z')) {
-      /* idx = 1..26 */
+      /* in case of alphabets, idx will be 1..26 */
       idx = 1 + (ch - 'A');
     } else if ((ch >= '0') && (ch <= '9')) {
-      /* idx = 27..36 */
+      /* in case of numbers, idx will be 27..36 */
       idx = 27 + (ch - '0');
     } else {
-      /* index = 37..45 */
+      /* in case of symbols, index will be 37..45 */
       const char *tmpstr = ",.?!-/@()";
       int k = isin(ch, (char *)tmpstr);
       if (k < 0) {
-	continue;
+        continue;
       }
+      // if ch is out of range, we will read next ch
       idx = 37 + k;
     }
     byte x[8];
     // x = (byte *)tmpstr;
-    x[0] = dataDnD[idx].t0; x[1] = dataDnD[idx].t1;
-    x[2] = dataDnD[idx].t2; x[3] = dataDnD[idx].t3;
-    x[4] = dataDnD[idx].t4; x[5] = dataDnD[idx].t5;
-    x[6] = dataDnD[idx].t6; x[7] = dataDnD[idx].t7;
+    x[0] = dataDnD01[idx].t0; x[1] = dataDnD01[idx].t1;
+    x[2] = dataDnD01[idx].t2; x[3] = dataDnD01[idx].t3;
+    x[4] = dataDnD01[idx].t4; x[5] = dataDnD01[idx].t5;
+    x[6] = dataDnD01[idx].t6; x[7] = dataDnD01[idx].t7;
     //
     
     if (_config & CW_TEXT) {
       if (_preamble15[0] != '\0') {
-	Serial.print(_preamble15);
+	      Serial.print(_preamble15);
       }
     // Serial.print(F("Q:["));
       Serial.print(F("["));
@@ -373,40 +380,66 @@ void imasMORSEclass::message(char *mesg) {
       Serial.print(F("] "));
     }
 
-    for (int j = 0; j < 8; j++) {
+    for (int j = 0; j < 8 /* (sizeof x) / (sizeof x[0])*/; j++) {
       if (x[j] == 1) {
-	// dot
-	if (_config & (CW_TEXT|CW_VERBOSE)) { Serial.print('.'); }
-	/*XXX*/ analogWrite(_beepPin, 400);//digitalWrite(_beepPin, HIGH);
-	delay(s);
-	/*XXX*/ analogWrite(_beepPin, 0);//digitalWrite(_beepPin, LOW);
-	delay(s);
+	      // dot
+	      if (_config & (CW_TEXT|CW_VERBOSE)) {
+          Serial.print('.'); 
+        }
+        if (_config & (CW_DIO|CW_VERBOSE)) {
+        }
+        if (_config & (CW_BEEP|CW_VERBOSE)) {
+        }
+        if (_config & (CW_TONE|CW_VERBOSE)) {
+        }
+
+	      /*XXX*/ analogWrite(_beepPin, 400);//digitalWrite(_beepPin, HIGH);
+	      delay(s);
+	      /*XXX*/ analogWrite(_beepPin, 0);//digitalWrite(_beepPin, LOW);
+	      delay(s);
 
       } else if (x[j] == 2) {
-	// dash
-	if (_config & (CW_TEXT|CW_VERBOSE)) { Serial.print('-'); }
-	/*XXX*/ analogWrite(_beepPin, 400);//digitalWrite(_beepPin, HIGH);
-	delay(3*s);
-	/*XXX*/ analogWrite(_beepPin, 0);//digitalWrite(_beepPin, LOW);
-	delay(s);
+	      // dash
+	      if (_config & (CW_TEXT|CW_VERBOSE)) {
+          Serial.print('-');
+        }
+        if (_config & (CW_DIO|CW_VERBOSE)) {
+        }
+        if (_config & (CW_BEEP|CW_VERBOSE)) {
+        }
+        if (_config & (CW_TONE|CW_VERBOSE)) {
+        }
+	      /*XXX*/ analogWrite(_beepPin, 400);//digitalWrite(_beepPin, HIGH);
+	      delay(3*s);
+	      /*XXX*/ analogWrite(_beepPin, 0);//digitalWrite(_beepPin, LOW);
+	      delay(s);
 
       } else if (x[j] == 3) {
-	// space
-	if (_config & (CW_TEXT|CW_VERBOSE)) { Serial.print(' '); }
-	delay(5*s);
+	      // space
+	      if (_config & (CW_TEXT|CW_VERBOSE)) {
+          Serial.print(' ');
+        }
+        if (_config & (CW_DIO|CW_VERBOSE)) {
+        }
+        if (_config & (CW_BEEP|CW_VERBOSE)) {
+        }
+        if (_config & (CW_TONE|CW_VERBOSE)) {
+        }
+	      delay(5*s);
 
       } else {
-	delay(2*s);
-	break;
+	      delay(2*s);
+	      break;
       }
     }
     
-    if (_config & (CW_TEXT|CW_VERBOSE)) { Serial.println(); }
+    if (_config & (CW_TEXT|CW_VERBOSE)) {
+      Serial.println();
+    }
     mesg++;
   }
-
-  // return(0);
 }
+  // return(0);
 
 // =========================================================
 
