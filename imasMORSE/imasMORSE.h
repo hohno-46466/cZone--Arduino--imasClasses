@@ -59,7 +59,7 @@ class imasMORSEclass : public virtual imasBASEclass {
   //
   void setTonePin(uint8_t tonePin);
   uint8_t getTonePin();
-  //  
+  // 
   void setPreamble15(char *str);
   char* getPreamble15();
   //
@@ -77,4 +77,3 @@ class imasMORSEclass : public virtual imasBASEclass {
 // ---------------------------------------------------------
 
 #endif // __IMAS_MORSE_H__
-
