@@ -385,44 +385,58 @@ void imasMORSEclass::message(char *mesg) {
 	      if (_config & (CW_TEXT|CW_VERBOSE)) {
           Serial.print('.'); 
         }
-        if (_config & (CW_DIO|CW_VERBOSE)) {
+        if (_config & (CW_DIO)) {
+          //
         }
-        if (_config & (CW_BEEP|CW_VERBOSE)) {
+        if (_config & (CW_BEEP)) {
+          analogWrite(_beepPin, 400);
         }
-        if (_config & (CW_TONE|CW_VERBOSE)) {
+        if (_config & (CW_TONE)) {
+          digitalWrite(_beepPin, HIGH);
         }
-
-	      /*XXX*/ analogWrite(_beepPin, 400);//digitalWrite(_beepPin, HIGH);
-	      delay(s);
-	      /*XXX*/ analogWrite(_beepPin, 0);//digitalWrite(_beepPin, LOW);
-	      delay(s);
+        delay(s);
+        if (_config & (CW_DIO)) {
+          //
+        }
+        if (_config & (CW_BEEP)) {
+          digitalWrite(_beepPin, LOW);
+        }
+        if (_config & (CW_TONE)) {
+          analogWrite(_beepPin, 0);
+        }
+        delay(s);
 
       } else if (x[j] == 2) {
 	      // dash
 	      if (_config & (CW_TEXT|CW_VERBOSE)) {
           Serial.print('-');
         }
-        if (_config & (CW_DIO|CW_VERBOSE)) {
+        if (_config & (CW_DIO)) {
         }
-        if (_config & (CW_BEEP|CW_VERBOSE)) {
+        if (_config & (CW_BEEP)) {
+          digitalWrite(_beepPin, HIGH);        
         }
-        if (_config & (CW_TONE|CW_VERBOSE)) {
+        if (_config & (CW_TONE)) {
+          analogWrite(_beepPin, 400);//
         }
-	      /*XXX*/ analogWrite(_beepPin, 400);//digitalWrite(_beepPin, HIGH);
-	      delay(3*s);
-	      /*XXX*/ analogWrite(_beepPin, 0);//digitalWrite(_beepPin, LOW);
-	      delay(s);
+        delay(3*s);
+	      if (_config & (CW_TEXT|CW_VERBOSE)) {
+          Serial.print('-');
+        }
+        if (_config & (CW_DIO)) {
+        }
+        if (_config & (CW_BEEP)) {
+          digitalWrite(_beepPin, LOW);
+        }
+        if (_config & (CW_TONE)) {
+          analogWrite(_beepPin, 0);//
+        }
+        delay(s);
 
       } else if (x[j] == 3) {
 	      // space
 	      if (_config & (CW_TEXT|CW_VERBOSE)) {
           Serial.print(' ');
-        }
-        if (_config & (CW_DIO|CW_VERBOSE)) {
-        }
-        if (_config & (CW_BEEP|CW_VERBOSE)) {
-        }
-        if (_config & (CW_TONE|CW_VERBOSE)) {
         }
 	      delay(5*s);
 
@@ -432,7 +446,7 @@ void imasMORSEclass::message(char *mesg) {
       }
     }
     
-    if (_config & (CW_TEXT|CW_VERBOSE)) {
+    if (_config & (CW_TEXT)) {
       Serial.println();
     }
     mesg++;
